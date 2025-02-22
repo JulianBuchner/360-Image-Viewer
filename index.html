@@ -99,13 +99,19 @@
         document.getElementById("fileName").textContent = file.name;
         var imageUrl = URL.createObjectURL(file);
 
-        // Destroy existing viewer instance if it exists.
-        if (viewer !== null) viewer.destroy();
+        // If a viewer exists, destroy it and clear the container.
+        if (viewer !== null) {
+          viewer.destroy();
+          document.getElementById("panorama").innerHTML = "";
+        }
 
         // Hide the placeholder text.
-        document.getElementById("placeholder").style.display = "none";
+        var placeholder = document.getElementById("placeholder");
+        if (placeholder) {
+          placeholder.style.display = "none";
+        }
 
-        // Initialize the Pannellum viewer with the selected image.
+        // Initialize the Pannellum viewer with the new image.
         viewer = pannellum.viewer("panorama", {
           type: "equirectangular",
           panorama: imageUrl,

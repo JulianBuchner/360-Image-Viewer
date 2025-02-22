@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>360 Image Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #ffffff;
+      }
+      /* Header styling */
+      #header {
+        height: 40px;
+        background-color: #1e1e1e;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      }
+      /* Modern upload button styling */
+      #loadButton {
+        height: 35px;
+        width: 35px;
+        background-color: #2da5f5;
+        border: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* File name display styling */
+      #fileName {
+        margin-left: 8px;
+        font-size: 14px;
+        color: #ffffff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      /* Panorama viewer takes the rest of the page */
+      #panorama {
+        height: calc(100% - 40px);
+        width: 100%;
+        position: relative;
+        background-color: #121212;
+      }
+      /* Placeholder text styling */
+      #placeholder {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        color: #aaaaaa;
+      }
+      /* Hide the file input */
+      #fileInput {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header with upload button and file name display -->
+    <div id="header">
+      <button id="loadButton" title="Upload Image">↑</button>
+      <span id="fileName">No file selected</span>
+      <input type="file" id="fileInput" accept="image/*" />
+    </div>
+
+    <!-- Panorama viewer area -->
+    <div id="panorama">
+      <div id="placeholder">Please upload an image</div>
+    </div>
+    <script>
+      var viewer = null;
+      
+      // Open the file explorer when the button is clicked.
+      document.getElementById("loadButton").addEventListener("click", function() {
+        document.getElementById("fileInput").click();
+      });
+      
+      // When a file is selected, update the file name and initialize Pannellum.
+      document.getElementById("fileInput").addEventListener("change", function(event) {
+        var file = event.target.files[0];
+        if (!file) return;
+        document.getElementById("fileName").textContent = file.name;
+        var imageUrl = URL.createObjectURL(file);
+
+        // Destroy existing viewer instance if it exists.
+        if (viewer !== null) viewer.destroy();
+
+        // Hide the placeholder text.
+        document.getElementById("placeholder").style.display = "none";
+
+        // Initialize the Pannellum viewer with the selected image.
+        viewer = pannellum.viewer("panorama", {
+          type: "equirectangular",
+          panorama: imageUrl,
+          autoLoad: true,
+        });
+      });
+    </script>
+  </body>
+</html>

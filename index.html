@@ -121,3 +121,64 @@
     </script>
   </body>
 </html>
+
+
+<!--
+document.getElementById("fileInput").addEventListener("change", function (event) {
+  var file = event.target.files[0]
+  if (!file) return
+
+  var reader = new FileReader()
+  reader.onload = function (e) {
+    var img = new Image()
+    img.onload = function () {
+      var maxTextureSize = 8192 // Max width supported by most mobile GPUs
+      if (img.width > maxTextureSize) {
+        var scaleFactor = maxTextureSize / img.width
+        var newWidth = maxTextureSize
+        var newHeight = img.height * scaleFactor
+
+        var canvas = document.createElement("canvas")
+        canvas.width = newWidth
+        canvas.height = newHeight
+        var ctx = canvas.getContext("2d")
+
+        ctx.drawImage(img, 0, 0, newWidth, newHeight)
+
+        // Convert the resized image to a Blob URL
+        canvas.toBlob(function (blob) {
+          var imageUrl = URL.createObjectURL(blob)
+          loadPanorama(imageUrl, file.name)
+        }, "image/jpeg", 0.9) // Adjust quality if needed
+      } else {
+        loadPanorama(e.target.result, file.name) // Load directly if size is OK
+      }
+    }
+    img.src = e.target.result
+  }
+  reader.readAsDataURL(file)
+})
+
+function loadPanorama(imageUrl, fileName) {
+  document.getElementById("fileName").textContent = fileName
+
+  // If a viewer exists, destroy it and clear the container.
+  if (viewer !== null) {
+    viewer.destroy()
+    document.getElementById("panorama").innerHTML = ""
+  }
+
+  // Hide the placeholder text.
+  var placeholder = document.getElementById("placeholder")
+  if (placeholder) {
+    placeholder.style.display = "none"
+  }
+
+  // Initialize the Pannellum viewer with the resized image.
+  viewer = pannellum.viewer("panorama", {
+    type: "equirectangular",
+    panorama: imageUrl,
+    autoLoad: true
+  })
+}
+-->
